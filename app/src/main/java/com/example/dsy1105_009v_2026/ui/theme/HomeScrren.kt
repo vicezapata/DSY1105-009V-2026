@@ -105,6 +105,16 @@ fun HomeScreen(){
                     )//fin Text1
 
 
+                Text("Texto dos",
+                    style= MaterialTheme.typography.bodyLarge.copy(
+                        color= MaterialTheme.colorScheme.onSurface.copy(alpha=0.8f),
+                        fontWeight = FontWeight.Bold),
+                    modifier= Modifier
+                        .padding(end=8.dp)
+
+                )//fin Text1
+
+
             }// fin Aplicar fila
 
 
@@ -113,7 +123,11 @@ fun HomeScreen(){
                 .height(16.dp)
             )
 
-            Button(onClick={/*  accion futura */}){
+            Button(onClick={/*  accion futura */},
+                modifier= Modifier.fillMaxWidth(0.8f)
+
+
+            ){
                 Text("Presioname")
             }// fin text
 
