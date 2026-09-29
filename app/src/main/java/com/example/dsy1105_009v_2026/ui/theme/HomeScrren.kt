@@ -19,6 +19,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,12 +31,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.dsy1105_009v_2026.R
+import com.example.dsy1105_009v_2026.ui.theme.login.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun HomeScreen(){
+fun HomeScreen(
+    navController: NavController,
+    vm: LoginViewModel = viewModel()
+
+){
+
+    val state = vm.uiState
+    var showPass by remember { mutableStateOf(false) }
 
     val ColorScheme= darkColorScheme(
         primary = Color(0xFF98222E),
@@ -148,6 +163,12 @@ fun HomeScreen(){
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview(){
-    HomeScreen()
+fun HomeScreenPreview() { // Crear un navController de manera ficticia para fines de la vista previa
+    val navController = rememberNavController()
+
+    // Puedes usar un ViewModel simulado aquí si no tienes acceso a uno real
+    val vm =
+        LoginViewModel() // Suponiendo que LoginViewModel está correctamente configurado para la vista previa
+
+    HomeScreen(navController = navController, vm = vm)
 }
