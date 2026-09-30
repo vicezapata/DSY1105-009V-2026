@@ -14,8 +14,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
@@ -29,6 +31,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -133,17 +137,60 @@ fun HomeScreen(
             }// fin Aplicar fila
 
 
+            OutlinedTextField(
+                value=state.username,
+                onValueChange = vm::onUsernameChange,
+                label={Text("Usuario")},
+                singleLine = true,
+                modifier= Modifier.fillMaxWidth(0.95f)
+            ) // fin user
 
-            Spacer(modifier= Modifier
-                .height(16.dp)
+
+
+            OutlinedTextField(
+                value=state.password,
+                onValueChange = vm::onPasswordChange,
+                label={Text("Contraseña")},
+                singleLine = true,
+                visualTransformation = if (showPass)
+                    VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    TextButton(onClick = { showPass =!showPass}){
+                    Text(if (showPass) "Ocultar" else "Ver"  )
+                    }//fin aplica
+                },// fin trail
+                modifier = Modifier.fillMaxWidth(0.95f)
+
+            )//fin pass
+
+
+            if(state.error !=null){
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                    text=state.error ?:"",
+                    color=MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
             )
+            }// fin state
 
-            Button(onClick={/*  accion futura */},
+            Spacer(modifier= Modifier.height(16.dp))
+
+            Button(onClick={/*  accion futura */
+            vm.submit{ user->
+                navController.navigate("muestraDatos/$user")
+                { //inicio navegacion
+                popUpTo("login") {inclusive=true} // no va a volver al login con back
+                launchSingleTop=true
+                } //termino navegacion
+
+            }// fin submit
+
+            },
+                enabled=!state.isLoading,
                 modifier= Modifier.fillMaxWidth(0.8f)
-
-
             ){
-                Text("Presioname")
+               // Text("Presioname")
+                Text( if(state.isLoading) "Validadndo" else "iniciar sesion"  )
             }// fin text
 
 
@@ -167,8 +214,7 @@ fun HomeScreenPreview() { // Crear un navController de manera ficticia para fine
     val navController = rememberNavController()
 
     // Puedes usar un ViewModel simulado aquí si no tienes acceso a uno real
-    val vm =
-        LoginViewModel() // Suponiendo que LoginViewModel está correctamente configurado para la vista previa
+    val vm = LoginViewModel() // Suponiendo que LoginViewModel está correctamente configurado para la vista previa
 
     HomeScreen(navController = navController, vm = vm)
 }
